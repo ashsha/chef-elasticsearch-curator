@@ -11,8 +11,14 @@ property :config, Hash, default: {}
 property :username, String, default: node['elasticsearch-curator']['username']
 property :minute, String, default: node['elasticsearch-curator']['cron_minute']
 property :hour, String, default: node['elasticsearch-curator']['cron_hour']
+property :day, String, default: node['elasticsearch-curator']['day_of_the_month']
+property :month, String, default: node['elasticsearch-curator']['month']
+property :weekday, String, default: node['elasticsearch-curator']['day_of_the_week']
 property :path, String, default: node['elasticsearch-curator']['action_file_path']
 property :bin_path, String, default: node['elasticsearch-curator']['bin_path']
+
+
+
 
 default_action :create
 
@@ -33,10 +39,13 @@ action :create do
   curator_args = "--config #{node['elasticsearch-curator']['config_file_path']}/curator.yml #{path}/#{name}.yml"
   cr = cron_d "curator-#{name}" do
     command "#{bin_path}/curator #{curator_args}"
-    user    new_resource.username
-    minute  new_resource.minute
-    hour    new_resource.hour
+    user                new_resource.username
+    minute              new_resource.minute
+    hour                new_resource.hour
+    day                 new_resource.day
+    month               new_resource.month
+    weekday             new_resource.weekday
     action  [:create]
   end
-  new_resource.updated_by_last_action(cr.updated_by_last_action?)
+#  new_resource.updated_by_last_action(cr.updated_by_last_action?)
 end
