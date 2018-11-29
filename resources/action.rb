@@ -30,14 +30,14 @@ action :create do
 
   require 'yaml'
 
-  file "#{new_resource.path}/#{name}.yml" do
+  file "#{new_resource.path}/#{new_resource.name}.yml" do
     content YAML.dump(config.to_hash)
     user new_resource.username
     mode '0644'
   end
 
-  curator_args = "--config #{node['elasticsearch-curator']['config_file_path']}/curator.yml #{new_resource.path}/#{name}.yml"
-  cr = cron_d "curator-#{name}" do
+  curator_args = "--config #{node['elasticsearch-curator']['config_file_path']}/curator.yml #{new_resource.path}/#{new_resource.name}.yml"
+  cr = cron_d "curator-#{new_resource.name}" do
     command "#{bin_path}/curator #{curator_args}"
     user                new_resource.username
     minute              new_resource.minute
