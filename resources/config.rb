@@ -37,9 +37,9 @@ action :configure do
 
   curatorconfig = new_resource.config.to_hash.clone
 
-  if !http_auth.nil? && http_auth.length > 2 && http_auth.include?(':')
-    curatorconfig['client']['http_auth'] = http_auth
-  end
+#  if !http_auth.nil? && http_auth.length > 2 && http_auth.include?(':')
+#    curatorconfig['client']['http_auth'] = http_auth
+#  end
 
   file "#{path}/curator.yml" do
     content YAML.dump(curatorconfig.to_hash)
