@@ -23,7 +23,7 @@ property :bin_path, String, default: node['elasticsearch-curator']['bin_path']
 default_action :create
 
 action :create do
-  directory path do
+  directory new_resource.path do
     recursive true
     action :create
   end
@@ -36,7 +36,7 @@ action :create do
     mode '0644'
   end
 
-  curator_args = "--config #{node['elasticsearch-curator']['config_file_path']}/curator.yml #{path}/#{name}.yml"
+  curator_args = "--config #{node['elasticsearch-curator']['config_file_path']}/curator.yml #{new_resource.path}/#{name}.yml"
   cr = cron_d "curator-#{name}" do
     command "#{bin_path}/curator #{curator_args}"
     user                new_resource.username
